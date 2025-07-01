@@ -1,8 +1,10 @@
 package furkanboztepe.com.services.impl;
 
+import furkanboztepe.com.dtos.DtoCourse;
 import furkanboztepe.com.dtos.DtoUser;
 import furkanboztepe.com.dtos.DtoUserIU;
 import furkanboztepe.com.entities.User;
+import furkanboztepe.com.entities.Course;
 import furkanboztepe.com.repositories.UserRepository;
 import furkanboztepe.com.services.IUserService;
 import org.springframework.beans.BeanUtils;
@@ -38,9 +40,18 @@ public class UserServiceImpl implements IUserService {
             DtoUser dto = new DtoUser();
             BeanUtils.copyProperties(user, dto);
 
+            List<DtoCourse> courseList = new ArrayList<>();
+
+            if (user.getCourses() != null && !user.getCourses().isEmpty()) {
+                for (Course course : user.getCourses()) {
+                    DtoCourse dtoCourse = new DtoCourse(course.getId(), course.getCourseName());
+                    courseList.add(dtoCourse);
+                }
+            }
+            dto.setCourses(courseList);
             dtoList.add(dto);
         }
         return dtoList;
     }
+    }
 
-}
