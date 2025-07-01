@@ -9,6 +9,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class UserServiceImpl implements IUserService {
 
@@ -25,4 +28,19 @@ public class UserServiceImpl implements IUserService {
         BeanUtils.copyProperties(dbUser, response);
         return response;
     }
+
+    @Override
+    public List<DtoUser> getUsers() {
+        List<DtoUser> dtoList = new ArrayList<>();
+
+        List<User> userList = userRepository.findAllUsers();
+        for (User user : userList) {
+            DtoUser dto = new DtoUser();
+            BeanUtils.copyProperties(user, dto);
+
+            dtoList.add(dto);
+        }
+        return dtoList;
+    }
+
 }
